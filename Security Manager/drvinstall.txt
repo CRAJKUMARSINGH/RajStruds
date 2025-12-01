@@ -1,0 +1,29 @@
+
+Sentry Hardware Lock
+==========================================================================
+drvinstall is GUI Based utility to install  and uninstall
+Sentry  device drivers.
+
+This utility automatically detects the underlying operating systems
+and installs the appropriate device driver in OS.
+
+his utility installs the drivers on the fly and there is no need to 
+re-boot/re-start the machine after installation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

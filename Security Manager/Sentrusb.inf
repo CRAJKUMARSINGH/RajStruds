@@ -1,0 +1,76 @@
+[Version]
+Signature="$CHICAGO$"
+Class=Hardware Locks
+ClassGuid={AD15C593-AFF1-4156-8D9C-C407A952E859}
+Provider=%MfgName%
+LayoutFile=LAYOUT.INF
+DriverVer=01/30/2002,1.10
+
+[SourceDiskNames]
+55%DiskName%,"Sentry"
+
+[SourceDiskFiles]
+SentrUsb.sys=55
+
+[DestinationDirs]
+DefaultDestDir=10,system32\drivers
+SentryLock.CopyList = 10,system32\drivers
+
+[ControlFlags]
+ExcludeFromSelect= * 
+
+[Manufacturer]
+%MfgName%=WyseSystems
+
+[WyseSystems]
+%Lock.DeviceDesc%=SENTRY_LOCK,USB\VID_04B4&PID_2002
+
+;*************************************************
+;;;Class Install Section
+[ClassInstall32]
+AddReg=LockClassAddReg
+
+[LockClassAddReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,"-20"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Windows 98 Registry Section
+[SENTRY_LOCK]
+CopyFiles=SentryLock.CopyList
+AddReg=SentryLock.AddReg
+
+[SentryLock.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,SentrUsb.sys
+HKR,,Description,,%HardwareLock.DeviceDesc%
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Windows 2000 Install Section
+[SENTRY_LOCK.NT]
+CopyFiles=SentryLock.CopyList
+
+;*************************************************
+;Windows 2000 Service install Section
+[SENTRY_LOCK.NT.Services]
+Addservice = SentrUsb,0x00000002, SentryLock_Service_Inst
+
+[SentryLock_Service_Inst]
+DisplayName	= %Sentry.SvcDesc%
+ServiceType	= 1			;SERVICE_KERNEL_DRIVER
+StartType	= 3			;DEMAND_START
+ErrorControl	= 1			;DISPLAY_ERROR
+ServiceBinary	= %12%\SentrUsb.sys
+LoadOrderGroup	= Extended Base
+
+;*************************************************
+[SentryLock.CopyList]
+SentrUsb.sys
+
+;*************************************************
+[Strings]
+ClassName="Hardware Locks"
+MfgName="WYSE Systems (India)."
+DiskName="Sentry USB Lock Driver"
+Lock.DeviceDesc="Sentry USB Lock"
+Sentry.SvcDesc="Sentry USB Lock Device Driver"
