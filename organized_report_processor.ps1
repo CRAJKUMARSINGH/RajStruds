@@ -58,40 +58,30 @@ New-DirectoryIfNotExists $finalOutputFolder
 
 Write-Host "Step 2: Processing and combining reports..." -ForegroundColor Yellow
 
-# Copy the advanced combined reports to FINAL_OUTPUT
-$advancedReports = "Advanced_Combined_Reports"
-if (Test-Path $advancedReports) {
-    # Copy the entire advanced reports directory to FINAL_OUTPUT
-    Copy-Item -Path "$advancedReports\*" -Destination $finalOutputFolder -Recurse -Force
-    Write-Host "SUCCESS: Advanced combined reports copied to FINAL_OUTPUT\$timestamp" -ForegroundColor Green
+# Run the improved HTML combiner to preserve original formatting
+if (Test-Path "improved_html_combiner.ps1") {
+    Write-Host "Running improved HTML combiner..." -ForegroundColor Yellow
+    powershell -ExecutionPolicy Bypass -File ".\improved_html_combiner.ps1"
+    
+    # Copy the improved combined reports to FINAL_OUTPUT
+    $improvedReports = "Improved_Combined_Reports"
+    if (Test-Path $improvedReports) {
+        Copy-Item -Path "$improvedReports\*" -Destination $finalOutputFolder -Recurse -Force
+        Write-Host "SUCCESS: Improved combined reports copied to FINAL_OUTPUT\$timestamp" -ForegroundColor Green
+    }
 } else {
-    Write-Host "WARNING: Advanced combined reports not found" -ForegroundColor Yellow
-}
-
-# Also copy the illustrated reports if they exist
-$illustratedReports = "Combined_Illustrated_Report"
-if (Test-Path $illustratedReports) {
-    $illustratedDest = "$finalOutputFolder\Illustrated_Report"
-    New-DirectoryIfNotExists $illustratedDest
-    Copy-Item -Path "$illustratedReports\*" -Destination $illustratedDest -Recurse -Force
-    Write-Host "SUCCESS: Illustrated reports copied to FINAL_OUTPUT\$timestamp\Illustrated_Report" -ForegroundColor Green
-}
-
-# Also copy comprehensive reports if they exist
-$reportsFolder = "Reports"
-if (Test-Path $reportsFolder) {
-    $latestComprehensive = Get-ChildItem $reportsFolder -Directory | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-    if ($latestComprehensive) {
-        $comprehensiveDest = "$finalOutputFolder\Comprehensive_Reports"
-        New-DirectoryIfNotExists $comprehensiveDest
-        Copy-Item -Path "$($latestComprehensive.FullName)\*" -Destination $comprehensiveDest -Recurse -Force
-        Write-Host "SUCCESS: Comprehensive reports copied to FINAL_OUTPUT\$timestamp\Comprehensive_Reports" -ForegroundColor Green
+    # Fallback to the advanced combined reports if improved version doesn't exist
+    $advancedReports = "Advanced_Combined_Reports"
+    if (Test-Path $advancedReports) {
+        # Copy the entire advanced reports directory to FINAL_OUTPUT
+        Copy-Item -Path "$advancedReports\*" -Destination $finalOutputFolder -Recurse -Force
+        Write-Host "SUCCESS: Advanced combined reports copied to FINAL_OUTPUT\$timestamp" -ForegroundColor Green
+    } else {
+        Write-Host "WARNING: Advanced combined reports not found" -ForegroundColor Yellow
     }
 }
 
 Write-Host ""
-
-# Step 4: Create a summary file in FINAL_OUTPUT
 Write-Host "Step 3: Creating summary file..." -ForegroundColor Yellow
 
 $summaryContent = "STRUDS Report Processing Summary`n"
@@ -105,15 +95,11 @@ $summaryContent += "`nFiles processed:`n"
 $summaryContent += "- Raw reports: $rawFileCount files`n"
 $summaryContent += "`nCombined reports location:`n"
 $summaryContent += "- Main combined report: FINAL_OUTPUT\$timestamp\index.html`n"
-$summaryContent += "- Illustrated report: FINAL_OUTPUT\$timestamp\Illustrated_Report`n"
-$summaryContent += "- Comprehensive reports: FINAL_OUTPUT\$timestamp\Comprehensive_Reports`n"
 
 $summaryContent > "$finalOutputFolder\PROCESSING_SUMMARY.txt"
 Write-Host "SUCCESS: Summary file created: FINAL_OUTPUT\$timestamp\PROCESSING_SUMMARY.txt" -ForegroundColor Green
 
 Write-Host ""
-
-# Final summary
 Write-Host "========================================" -ForegroundColor Green
 Write-Host "PROCESSING COMPLETED SUCCESSFULLY!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green

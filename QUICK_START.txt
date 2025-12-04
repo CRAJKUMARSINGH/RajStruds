@@ -1,0 +1,143 @@
+================================================================================
+STRUDS MASTER ONE-CLICK AUTOMATION - QUICK START GUIDE
+================================================================================
+
+EASIEST WAY TO RUN:
+-------------------
+Double-click: RUN_ME.bat
+
+OR use PowerShell:
+------------------
+.\master_one_click.ps1
+
+WHAT IT DOES:
+-------------
+1. Tests all .bld files in Test_Input_files folder
+2. Runs STRUDS analysis and design
+3. Collects all reports to RAW_REPORT (timestamped)
+4. Converts DXF drawings to PDF (A4 landscape)
+5. Organizes reports by component type (Footings, Columns, Beams, Slabs)
+6. Creates master combined HTML report
+7. Packages all PDFs together
+8. Creates ZIP of all drawings
+9. Saves everything to FINAL_OUTPUT (timestamped)
+
+WHERE TO FIND RESULTS:
+----------------------
+Main Report:
+  FINAL_OUTPUT\[timestamp]\MASTER_COMBINED_REPORT.html
+  
+  ⭐ OPEN THIS FILE IN YOUR WEB BROWSER! ⭐
+
+Summary:
+  FINAL_OUTPUT\[timestamp]\EXECUTION_SUMMARY.txt
+
+Organized Reports:
+  FINAL_OUTPUT\[timestamp]\Footings\
+  FINAL_OUTPUT\[timestamp]\Columns\
+  FINAL_OUTPUT\[timestamp]\Beams\
+  FINAL_OUTPUT\[timestamp]\Slabs\
+
+All PDFs:
+  FINAL_OUTPUT\[timestamp]\PDF_Package\
+
+All Drawings:
+  FINAL_OUTPUT\[timestamp]\ALL_DRAWINGS_[timestamp].zip
+
+COMMAND OPTIONS:
+----------------
+Skip testing (use existing reports):
+  .\master_one_click.ps1 -SkipTests
+
+Skip drawing conversion:
+  .\master_one_click.ps1 -SkipDrawings
+
+Skip PDF packaging:
+  .\master_one_click.ps1 -SkipReports
+
+TYPICAL EXECUTION TIME:
+-----------------------
+Small project (5-10 files):   2-5 minutes
+Medium project (10-20 files): 5-15 minutes
+Large project (20+ files):    15-30 minutes
+
+REQUIREMENTS:
+-------------
+- Windows 7 or higher
+- PowerShell 5.1+ (included in Windows)
+- .bld files in Test_Input_files folder
+- STRUDS software (for real integration)
+- CAD software (for DXF to PDF conversion)
+
+TROUBLESHOOTING:
+----------------
+Script won't run:
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+No reports generated:
+  - Check .bld files exist in Test_Input_files folder
+  - Verify STRUDS executables are accessible
+
+Need help:
+  - Read README_COMPLETE_SYSTEM.md
+  - Read MASTER_ONE_CLICK_README.md
+  - Read STRUDS_INTEGRATION_GUIDE.md
+
+INTEGRATION WITH REAL STRUDS:
+------------------------------
+The script currently simulates STRUDS execution.
+To integrate with real STRUDS software:
+  1. Read STRUDS_INTEGRATION_GUIDE.md
+  2. Update script with actual STRUDS paths
+  3. Implement real DXF to PDF conversion
+  4. Test with one file first
+
+FOLDER STRUCTURE:
+-----------------
+Test_Input_files/     ← Put your .bld files here
+RAW_REPORT/           ← Raw reports from STRUDS (timestamped)
+FINAL_OUTPUT/         ← Final organized output (timestamped)
+PDF_OUTPUT/           ← Converted PDF drawings (timestamped)
+
+OUTPUT ORGANIZATION:
+--------------------
+FINAL_OUTPUT\[timestamp]\
+  ├── MASTER_COMBINED_REPORT.html  ← ⭐ MAIN REPORT
+  ├── EXECUTION_SUMMARY.txt
+  ├── ALL_DRAWINGS_[timestamp].zip
+  ├── Footings\
+  │   ├── Schedule\
+  │   ├── Design\
+  │   └── Drawings\
+  ├── Columns\
+  │   ├── Schedule\
+  │   ├── Design\
+  │   └── Drawings\
+  ├── Beams\
+  │   ├── Schedule\
+  │   ├── Design\
+  │   └── Drawings\
+  ├── Slabs\
+  │   ├── Schedule\
+  │   ├── Design\
+  │   └── Drawings\
+  └── PDF_Package\
+
+QUICK TIPS:
+-----------
+1. Always check EXECUTION_SUMMARY.txt after running
+2. Archive old FINAL_OUTPUT folders periodically
+3. Use -SkipTests to reprocess existing reports
+4. Test with one file before processing all files
+5. Keep raw reports in RAW_REPORT for reference
+
+SUPPORT:
+--------
+Check these files for detailed help:
+  - README_COMPLETE_SYSTEM.md (overview)
+  - MASTER_ONE_CLICK_README.md (detailed usage)
+  - STRUDS_INTEGRATION_GUIDE.md (integration steps)
+
+================================================================================
+READY TO START? Double-click RUN_ME.bat or run .\master_one_click.ps1
+================================================================================
